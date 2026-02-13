@@ -9,35 +9,41 @@ jobs:
   build:
     runs-on: macos-14
 
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install deps
+      - name: Install Dependencies
         run: |
+          brew update
           brew install autoconf automake libtool pkg-config
 
-      - name: Build iOS
+      - name: Clean Workspace
         run: |
-          chmod +x Scripts/build-ios.sh
-          Scripts/build-ios.sh
+          rm -rf build-output
+          rm -rf FFmpegKitLite.xcframework
+          rm -f FFmpegKitLite.xcframework.zip
 
-    #   - name: Build macOS
-    #     run: |
-    #       chmod +x Scripts/build-macos.sh
-    #       Scripts/build-macos.sh
+      - name: Build
+        run: |
+          chmod +x Scripts/build.sh
+          Scripts/build.sh
 
       - name: Package
         run: |
-            chmod +x Scripts/package.sh
-            Scripts/package.sh
+          chmod +x Scripts/package.sh
+          Scripts/package.sh
 
-      - name: Commit and Push
-        run: |
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-
-            git add -f Frameworks/ios
-            git commit -m "Update iOS XCFramework for ${{ github.ref_name }}" || exit 0
-            git push origin HEAD:main        
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: FFmpegKitLite.xcframework.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print Checksum
+        run: |
+          echo "SwiftPM checksum:"
+          cat checksum.txt
