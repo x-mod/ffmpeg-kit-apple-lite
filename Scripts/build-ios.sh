@@ -13,6 +13,7 @@ cd "$WORK_DIR"
 
 # ⚠️ 清空 prebuilt，避免重复库标识符
 rm -rf prebuilt
+rm -rf "$HOME/Library/ffmpeg-kit"
 
 # 构建 iOS XCFramework
 ./ios.sh \
