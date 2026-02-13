@@ -31,7 +31,23 @@ OUTPUT_DIR="build-output/FFmpegKitLite-iOS"
 rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 
-# cp -R prebuilt/ffmpegkit.xcframework output/
-cp -R "$WORK_DIR/prebuilt/bundle-apple-xcframework-ios/ffmpegkit.xcframework" "$OUTPUT_DIR/"
+# FFmpegKit 生成的 XCFramework 路径
+XCFRAMEWORK_DIR="$WORK_DIR/prebuilt/bundle-apple-xcframework-ios"
 
-echo "✅ iOS build complete"
+# 自动遍历所有 xcframework
+XCODEBUILD_ARGS=()
+for FRAMEWORK in "$XCFRAMEWORK_DIR"/*.xcframework; do
+  FRAMEWORK_NAME=$(basename "$FRAMEWORK" .xcframework)
+  for PLATFORM_DIR in "$FRAMEWORK"/*; do
+    if [[ -d "$PLATFORM_DIR" && -f "$PLATFORM_DIR/$FRAMEWORK_NAME.framework/Info.plist" ]]; then
+      XCODEBUILD_ARGS+=("-framework" "$PLATFORM_DIR/$FRAMEWORK_NAME.framework")
+    fi
+  done
+done
+
+# 输出统一 XCFramework
+UNIFIED_XCFRAMEWORK="$OUTPUT_DIR/FFmpegKitLite.xcframework"
+
+xcodebuild -create-xcframework "${XCODEBUILD_ARGS[@]}" -output "$UNIFIED_XCFRAMEWORK"
+
+echo "✅ iOS build complete: $UNIFIED_XCFRAMEWORK"
