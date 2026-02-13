@@ -21,11 +21,6 @@ jobs:
           chmod +x Scripts/build-ios.sh
           Scripts/build-ios.sh
 
-      - name: print ./ffmpeg/prebuilt/
-        working-directory: ./ffmpeg/prebuilt/
-        run: |
-          ls -al
-          tree -L 3
     #   - name: Build macOS
     #     run: |
     #       chmod +x Scripts/build-macos.sh
