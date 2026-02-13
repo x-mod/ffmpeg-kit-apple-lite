@@ -28,14 +28,16 @@ jobs:
 
       - name: Package
         run: |
-          chmod +x Scripts/package.sh
-          Scripts/package.sh
+            chmod +x Scripts/package.sh
+            Scripts/package.sh
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            artifacts/ffmpegkit-ios.zip
-        # artifacts/ffmpegkit-macos.zip
+      - name: Commit and Push
+        run: |
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            git add -f Frameworks/ios
+            git commit -m "Update iOS XCFramework for ${{ github.ref_name }}" || exit 0
+            git push origin HEAD:main        
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
