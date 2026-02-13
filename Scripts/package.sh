@@ -1,21 +1,25 @@
 #!/bin/bash
 set -e
 
-FINAL_DIR="build-output/FFmpegKitLite"
-ZIP_NAME="FFmpegKitLite.zip"
+mkdir -p release
 
-rm -f "$ZIP_NAME"
+echo "📦 Packaging iOS..."
+ditto -c -k --sequesterRsrc --keepParent \
+  build-output/FFmpegKitLite-iOS \
+  release/FFmpegKitLite-iOS.zip
 
-ditto -c -k --sequesterRsrc --keepParent "$FINAL_DIR" "$ZIP_NAME"
+echo "📦 Packaging macOS..."
+ditto -c -k --sequesterRsrc --keepParent \
+  build-output/FFmpegKitLite-macOS \
+  release/FFmpegKitLite-macOS.zip
 
-echo "🔐 Generating checksum..."
-CHECKSUM=$(swift package compute-checksum "$ZIP_NAME")
+echo "🔐 Generating checksums..."
 
-echo "$CHECKSUM" > checksum.txt
+swift package compute-checksum release/FFmpegKitLite-iOS.zip > release/ios.checksum
+swift package compute-checksum release/FFmpegKitLite-macOS.zip > release/macos.checksum
 
 echo "========================================"
-echo "✅ Done"
-echo "Checksum: $CHECKSUM"
+echo "✅ Release Ready"
 echo "========================================"
 
-du -sh "$ZIP_NAME"
+ls -lh release

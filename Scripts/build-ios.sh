@@ -1,74 +1,36 @@
 #!/bin/bash
 set -e
 
-git clone --depth 1 --branch v6.0 https://github.com/arthenica/ffmpeg-kit.git
-cd ffmpeg-kit
+echo "========================================"
+echo "📱 Building FFmpegKit Lite (iOS)"
+echo "========================================"
 
-export FFMPEG_CONFIGURE_OPTIONS="\
---disable-everything \
---enable-small \
---disable-programs \
---disable-doc \
---disable-debug \
---disable-network \
---disable-autodetect \
-\
---enable-avcodec \
---enable-avformat \
---enable-avutil \
---enable-swresample \
---enable-swscale \
-\
---enable-protocol=file \
-\
---enable-demuxer=mov \
---enable-demuxer=matroska \
---enable-demuxer=avi \
---enable-demuxer=flv \
---enable-demuxer=webm \
---enable-demuxer=mpegts \
---enable-demuxer=mpegps \
---enable-demuxer=asf \
-\
---enable-muxer=mp4 \
---enable-muxer=mov \
---enable-muxer=adts \
-\
---enable-decoder=h264 \
---enable-decoder=hevc \
---enable-decoder=mpeg4 \
---enable-decoder=mpeg2video \
---enable-decoder=vp8 \
---enable-decoder=vp9 \
---enable-decoder=wmv3 \
---enable-decoder=msmpeg4v3 \
-\
---enable-decoder=aac \
---enable-decoder=mp3 \
---enable-decoder=ac3 \
---enable-decoder=pcm_s16le \
---enable-decoder=vorbis \
-\
---enable-parser=h264 \
---enable-parser=hevc \
---enable-parser=mpeg4video \
---enable-parser=mpegaudio \
---enable-parser=aac \
-\
---enable-encoder=h264_videotoolbox \
---enable-encoder=aac \
-\
---enable-hwaccel=h264_videotoolbox \
-"
+WORK_DIR=$(mktemp -d)
+
+git clone --depth 1 --branch v6.0 https://github.com/arthenica/ffmpeg-kit.git "$WORK_DIR"
+
+cd "$WORK_DIR"
 
 ./ios.sh \
   --xcframework \
+  --disable-armv7 \
+  --disable-armv7s \
+  --disable-arm64e \
+  --disable-i386 \
+  --disable-x86-64 \
+  --disable-x86-64-mac-catalyst \
+  --disable-arm64-mac-catalyst \
   --enable-ios-videotoolbox \
   --enable-ios-audiotoolbox \
   --enable-ios-zlib \
-  --disable-armv7 \
-  --disable-armv7s \
-  --disable-i386 \
-  --disable-arm64e
+  --no-bitcode
 
-cd ..
+cd -
+
+OUTPUT_DIR="build-output/FFmpegKitLite-iOS"
+rm -rf "$OUTPUT_DIR"
+mkdir -p "$OUTPUT_DIR"
+
+cp -R "$WORK_DIR/prebuilt/bundle-apple-xcframework-ios/"* "$OUTPUT_DIR/"
+
+echo "✅ iOS build complete"

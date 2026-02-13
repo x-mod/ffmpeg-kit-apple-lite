@@ -23,27 +23,53 @@ jobs:
       - name: Clean Workspace
         run: |
           rm -rf build-output
-          rm -rf FFmpegKitLite
-          rm -f FFmpegKitLite.zip
+          rm -rf release
 
-      - name: Build
+      ########################################
+      # 📱 Build iOS
+      ########################################
+      - name: Build iOS
         run: |
-          chmod +x Scripts/build.sh
-          Scripts/build.sh
+          chmod +x Scripts/build-ios.sh
+          Scripts/build-ios.sh
 
+      ########################################
+      # 🖥 Build macOS
+      ########################################
+      - name: Build macOS
+        run: |
+          chmod +x Scripts/build-macos.sh
+          Scripts/build-macos.sh
+
+      ########################################
+      # 📦 Package
+      ########################################
       - name: Package
         run: |
           chmod +x Scripts/package.sh
           Scripts/package.sh
 
-      - name: Create Release
+      ########################################
+      # 🚀 Create Release
+      ########################################
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: FFmpegKitLite.zip
+          files: |
+            release/FFmpegKitLite-iOS.zip
+            release/FFmpegKitLite-macOS.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Print Checksum
+      ########################################
+      # 🔐 Print Checksums
+      ########################################
+      - name: Print Checksums
         run: |
-          echo "SwiftPM checksum:"
-          cat checksum.txt
+          echo "===================================="
+          echo "📱 iOS SwiftPM Checksum:"
+          cat release/ios.checksum
+          echo ""
+          echo "🖥 macOS SwiftPM Checksum:"
+          cat release/macos.checksum
+          echo "===================================="
