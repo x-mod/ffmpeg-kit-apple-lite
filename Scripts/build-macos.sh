@@ -24,6 +24,6 @@ OUTPUT_DIR="build-output/FFmpegKitLite-macOS"
 rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 
-cp -R "$WORK_DIR/prebuilt/bundle-apple-xcframework-macos/"* "$OUTPUT_DIR/"
+cp -R "$WORK_DIR/prebuilt/bundle-apple-xcframework-macos/ffmpegkit.xcframework" "$OUTPUT_DIR/"
 
 echo "✅ macOS build complete"

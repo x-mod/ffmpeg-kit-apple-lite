@@ -31,6 +31,7 @@ OUTPUT_DIR="build-output/FFmpegKitLite-iOS"
 rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 
-cp -R "$WORK_DIR/prebuilt/bundle-apple-xcframework-ios/"* "$OUTPUT_DIR/"
+# cp -R prebuilt/ffmpegkit.xcframework output/
+cp -R "$WORK_DIR/prebuilt/bundle-apple-xcframework-ios/ffmpegkit.xcframework" "$OUTPUT_DIR/"
 
 echo "✅ iOS build complete"
