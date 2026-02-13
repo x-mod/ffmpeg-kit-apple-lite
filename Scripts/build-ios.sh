@@ -6,7 +6,7 @@ FFMPEG_VERSION=6.0
 git clone --depth 1 --branch v${FFMPEG_VERSION} https://github.com/arthenica/ffmpeg-kit.git
 cd ffmpeg-kit
 
-./ios.sh \
+./ios.sh all \
   --disable-armv7 \
   --disable-armv7s \
   \
