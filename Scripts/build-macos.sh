@@ -11,6 +11,10 @@ git clone --depth 1 --branch v6.0 https://github.com/arthenica/ffmpeg-kit.git "$
 
 cd "$WORK_DIR"
 
+# ⚠️ 清空 prebuilt 防止重复库标识符
+rm -rf prebuilt
+
+# 构建 macOS XCFramework
 ./macos.sh \
   --xcframework \
   --disable-x86-64 \
