@@ -13,7 +13,6 @@ cd "$WORK_DIR"
 
 # ⚠️ 清空 prebuilt，避免重复库标识符
 rm -rf prebuilt
-rm -rf "$HOME/Library/ffmpeg-kit"
 
 # 构建 iOS XCFramework
 ./ios.sh \
@@ -42,12 +41,7 @@ XCFRAMEWORK_DIR="$WORK_DIR/prebuilt/bundle-apple-xcframework-ios"
 # 自动遍历所有 xcframework
 XCODEBUILD_ARGS=()
 for FRAMEWORK in "$XCFRAMEWORK_DIR"/*.xcframework; do
-  FRAMEWORK_NAME=$(basename "$FRAMEWORK" .xcframework)
-  for PLATFORM_DIR in "$FRAMEWORK"/*; do
-    if [[ -d "$PLATFORM_DIR" && -f "$PLATFORM_DIR/$FRAMEWORK_NAME.framework/Info.plist" ]]; then
-      XCODEBUILD_ARGS+=("-framework" "$PLATFORM_DIR/$FRAMEWORK_NAME.framework")
-    fi
-  done
+  XCODEBUILD_ARGS+=("-framework" "$FRAMEWORK")
 done
 
 # 输出统一 XCFramework

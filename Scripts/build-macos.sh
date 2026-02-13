@@ -35,12 +35,7 @@ XCFRAMEWORK_DIR="$WORK_DIR/prebuilt/bundle-apple-xcframework-macos"
 # 自动遍历所有 xcframework 并准备 xcodebuild 参数
 XCODEBUILD_ARGS=()
 for FRAMEWORK in "$XCFRAMEWORK_DIR"/*.xcframework; do
-  FRAMEWORK_NAME=$(basename "$FRAMEWORK" .xcframework)
-  for PLATFORM_DIR in "$FRAMEWORK"/*; do
-    if [[ -d "$PLATFORM_DIR" && -f "$PLATFORM_DIR/$FRAMEWORK_NAME.framework/Info.plist" ]]; then
-      XCODEBUILD_ARGS+=("-framework" "$PLATFORM_DIR/$FRAMEWORK_NAME.framework")
-    fi
-  done
+  XCODEBUILD_ARGS+=("-framework" "$FRAMEWORK")
 done
 
 # 创建统一 XCFramework
