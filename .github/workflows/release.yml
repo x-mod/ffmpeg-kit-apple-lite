@@ -23,8 +23,8 @@ jobs:
       - name: Clean Workspace
         run: |
           rm -rf build-output
-          rm -rf FFmpegKitLite.xcframework
-          rm -f FFmpegKitLite.xcframework.zip
+          rm -rf FFmpegKitLite
+          rm -f FFmpegKitLite.zip
 
       - name: Build
         run: |
@@ -39,9 +39,9 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: FFmpegKitLite.xcframework.zip
+          files: FFmpegKitLite.zip
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Print Checksum
         run: |

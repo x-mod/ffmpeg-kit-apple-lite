@@ -71,9 +71,8 @@ echo "🖥 Building macOS..."
   --xcframework \
   --enable-macos-videotoolbox \
   --enable-macos-audiotoolbox \
-  --enable-macos-zlib \
-  --disable-arm64 \
-  --disable-x86-64
+  --enable-macos-zlib 
+  
 
 MAC_BUNDLE="$WORK_DIR/prebuilt/bundle-apple-xcframework-macos"
 
