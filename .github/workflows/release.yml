@@ -57,6 +57,7 @@ jobs:
         with:
           files: |
             release/ffmpegkit-ios.zip
+            release/libavdevice-ios.zip
             release/libavcodec-ios.zip
             release/libavfilter-ios.zip
             release/libavformat-ios.zip
@@ -64,6 +65,7 @@ jobs:
             release/libswresample-ios.zip
             release/libswscale-ios.zip
             release/ffmpegkit-macos.zip
+            release/libavdevice-macos.zip
             release/libavcodec-macos.zip
             release/libavfilter-macos.zip
             release/libavformat-macos.zip
