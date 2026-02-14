@@ -1,25 +1,44 @@
 #!/bin/bash
 set -e
 
-mkdir -p release
+OUTPUT_DIR="release"
+IOS_DIR="build-output/FFmpegKitLite-iOS"
+MACOS_DIR="build-output/FFmpegKitLite-macOS"
 
-echo "📦 Packaging iOS..."
-ditto -c -k --sequesterRsrc --keepParent \
-  build-output/FFmpegKitLite-iOS \
-  release/FFmpegKitLite-iOS.zip
+mkdir -p "$OUTPUT_DIR"
 
-echo "📦 Packaging macOS..."
-ditto -c -k --sequesterRsrc --keepParent \
-  build-output/FFmpegKitLite-macOS \
-  release/FFmpegKitLite-macOS.zip
+echo "📦 Packaging iOS xcframeworks..."
 
-echo "🔐 Generating checksums..."
+for XCFRAMEWORK in "$IOS_DIR"/*.xcframework; do
+  NAME=$(basename "$XCFRAMEWORK" .xcframework)
+  ZIP_PATH="$OUTPUT_DIR/${NAME}-ios.zip"
 
-swift package compute-checksum release/FFmpegKitLite-iOS.zip > release/ios.checksum
-swift package compute-checksum release/FFmpegKitLite-macOS.zip > release/macos.checksum
+  echo "  → $NAME"
+  ditto -c -k --sequesterRsrc --keepParent \
+    "$XCFRAMEWORK" \
+    "$ZIP_PATH"
+
+  swift package compute-checksum "$ZIP_PATH" > "$OUTPUT_DIR/${NAME}-ios.checksum"
+done
+
+
+echo "📦 Packaging macOS xcframeworks..."
+
+for XCFRAMEWORK in "$MACOS_DIR"/*.xcframework; do
+  NAME=$(basename "$XCFRAMEWORK" .xcframework)
+  ZIP_PATH="$OUTPUT_DIR/${NAME}-macos.zip"
+
+  echo "  → $NAME"
+  ditto -c -k --sequesterRsrc --keepParent \
+    "$XCFRAMEWORK" \
+    "$ZIP_PATH"
+
+  swift package compute-checksum "$ZIP_PATH" > "$OUTPUT_DIR/${NAME}-macos.checksum"
+done
+
 
 echo "========================================"
 echo "✅ Release Ready"
 echo "========================================"
 
-ls -lh release
+ls -lh "$OUTPUT_DIR"

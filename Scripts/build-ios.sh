@@ -11,10 +11,6 @@ git clone --depth 1 --branch v6.0 https://github.com/arthenica/ffmpeg-kit.git "$
 
 cd "$WORK_DIR"
 
-# ⚠️ 清空 prebuilt，避免重复库标识符
-rm -rf prebuilt
-
-# 构建 iOS XCFramework
 ./ios.sh \
   --xcframework \
   --disable-armv7 \
@@ -35,17 +31,6 @@ OUTPUT_DIR="build-output/FFmpegKitLite-iOS"
 rm -rf "$OUTPUT_DIR"
 mkdir -p "$OUTPUT_DIR"
 
-# FFmpegKit 生成的 XCFramework 路径
-XCFRAMEWORK_DIR="$WORK_DIR/prebuilt/bundle-apple-xcframework-ios"
+cp -R "$WORK_DIR/prebuilt/bundle-apple-xcframework-ios/"* "$OUTPUT_DIR/"
 
-# 自动遍历所有 xcframework
-XCODEBUILD_ARGS=()
-for FRAMEWORK in "$XCFRAMEWORK_DIR"/*.xcframework; do
-  XCODEBUILD_ARGS+=("-framework" "$FRAMEWORK")
-done
-
-# 输出统一 XCFramework
-UNIFIED_XCFRAMEWORK="$OUTPUT_DIR/FFmpegKitLite.xcframework"
-xcodebuild -create-xcframework "${XCODEBUILD_ARGS[@]}" -output "$UNIFIED_XCFRAMEWORK"
-
-echo "✅ iOS build complete: $UNIFIED_XCFRAMEWORK"
+echo "✅ iOS build complete"
