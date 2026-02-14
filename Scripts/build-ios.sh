@@ -24,7 +24,6 @@ cd "$WORK_DIR"
   --enable-ios-audiotoolbox \
   --enable-ios-zlib \
   --enable-openssl \
-  --enable-srt \
   --no-bitcode
 
 cd -

@@ -17,7 +17,6 @@ cd "$WORK_DIR"
   --enable-macos-videotoolbox \
   --enable-macos-audiotoolbox \
   --enable-openssl \
-  --enable-srt \
   --enable-macos-zlib
 
 cd -
