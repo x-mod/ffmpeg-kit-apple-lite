@@ -16,6 +16,8 @@ cd "$WORK_DIR"
   --disable-x86-64 \
   --enable-macos-videotoolbox \
   --enable-macos-audiotoolbox \
+  --enable-openssl \
+  --enable-srt \
   --enable-macos-zlib
 
 cd -
